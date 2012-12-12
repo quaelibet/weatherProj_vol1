@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>593</width>
-    <height>373</height>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox"/>
+            <widget class="QComboBox" name="cityCombo1"/>
            </item>
           </layout>
          </widget>
@@ -52,7 +52,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_2"/>
+            <widget class="QComboBox" name="countryCombo1"/>
            </item>
           </layout>
          </widget>
@@ -68,7 +68,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_3"/>
+            <widget class="QComboBox" name="monthCombo1"/>
            </item>
           </layout>
          </widget>
@@ -84,24 +84,24 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_4"/>
+            <widget class="QComboBox" name="yearCombo1"/>
            </item>
           </layout>
-          <zorder>comboBox_4</zorder>
+          <zorder>yearCombo1</zorder>
           <zorder>label_4</zorder>
-          <zorder>comboBox_4</zorder>
+          <zorder>yearCombo1</zorder>
           <zorder>label_4</zorder>
          </widget>
         </item>
         <item row="2" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="showData1">
           <property name="text">
            <string>Pokaż dane</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0" colspan="2">
-         <widget class="QTextEdit" name="textEdit"/>
+         <widget class="QTextEdit" name="textEdit1"/>
         </item>
        </layout>
       </widget>
@@ -121,7 +121,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_16"/>
+            <widget class="QComboBox" name="cityCombo2"/>
            </item>
           </layout>
          </widget>
@@ -137,7 +137,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_15"/>
+            <widget class="QComboBox" name="countryCombo2"/>
            </item>
           </layout>
          </widget>
@@ -153,7 +153,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_13"/>
+            <widget class="QComboBox" name="monthCombo2"/>
            </item>
           </layout>
          </widget>
@@ -169,20 +169,20 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_14"/>
+            <widget class="QComboBox" name="yearCombo2"/>
            </item>
           </layout>
          </widget>
         </item>
         <item row="2" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="showData2">
           <property name="text">
            <string>Pokaż dane</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0" colspan="2">
-         <widget class="QTextEdit" name="textEdit_3"/>
+         <widget class="QTextEdit" name="textEdit2"/>
         </item>
        </layout>
       </widget>
