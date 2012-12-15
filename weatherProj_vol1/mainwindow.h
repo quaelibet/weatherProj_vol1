@@ -20,9 +20,13 @@ public:
     ~MainWindow();
     //QList<QStringList> processReply(QNetworkReply* reply);
     QStringList processReply(QNetworkReply* reply);
-    void assignIndex(QString header, int* dateId, int* maxTempId, int* avgTempId, int* minTempId);
-    void assignData(QStringList allDataList, QList<float>* maxTemp, QList<float>* avgTemp, QList<float>* minTemp, QList<QDate>* date, int dateId, int maxTempId, int avgTempId, int minTempId);
-    
+    //void assignIndex(QString header, int* dateId, int* avgTempId, int* minTempId);
+    void assignIndex(QString header, int*dateId, int*avgTempId, int*avgDewId, int*avgHumidityId, int*avgPressureId, int*avgWindId, int*precipitationId, int*cloudCoverId);
+    //void assignData(QStringList allDataList, QList<float>* maxTemp, QList<float>* avgTemp, QList<float>* minTemp, QList<QDate>* date, int dateId, int maxTempId, int avgTempId, int minTempId);
+    void loadData(QStringList dayData, int id, QList<float>* list);
+    void assignData(QStringList allDataList, QList<QDate>* date, QList<float>* avgTemp, QList<float>* avgDew, QList<float>* avgHumidity, QList<float>* avgPressure, QList<float>* avgWind, QList<float>* precipitation, QList<float>* cloudCover, int dateId, int avgTempId, int avgDewId, int avgHumidityId, int avgPressureId, int avgWindId, int precipitationId, int cloudCoverId);
+
+
 private slots:
     void on_showData1_clicked();
     void replyFinished1(QNetworkReply* reply);
