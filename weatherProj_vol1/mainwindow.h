@@ -18,6 +18,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    //QList<QStringList> processReply(QNetworkReply* reply);
+    QStringList processReply(QNetworkReply* reply);
+    void assignIndex(QString header, int* dateId, int* maxTempId, int* avgTempId, int* minTempId);
+    void assignData(QStringList allDataList, QList<float>* maxTemp, QList<float>* avgTemp, QList<float>* minTemp, QList<QDate>* date, int dateId, int maxTempId, int avgTempId, int minTempId);
     
 private slots:
     void on_showData1_clicked();
