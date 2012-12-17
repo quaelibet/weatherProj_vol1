@@ -6,6 +6,7 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
+#include "qcustomplot.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,8 +24,8 @@ public:
     //void assignIndex(QString header, int* dateId, int* avgTempId, int* minTempId);
     void assignIndex(QString header, int*dateId, int*avgTempId, int*avgDewId, int*avgHumidityId, int*avgPressureId, int*avgWindId, int*precipitationId, int*cloudCoverId);
     //void assignData(QStringList allDataList, QList<float>* maxTemp, QList<float>* avgTemp, QList<float>* minTemp, QList<QDate>* date, int dateId, int maxTempId, int avgTempId, int minTempId);
-    void loadData(QStringList dayData, int id, QList<float>* list);
-    void assignData(QStringList allDataList, QList<QDate>* date, QList<float>* avgTemp, QList<float>* avgDew, QList<float>* avgHumidity, QList<float>* avgPressure, QList<float>* avgWind, QList<float>* precipitation, QList<float>* cloudCover, int dateId, int avgTempId, int avgDewId, int avgHumidityId, int avgPressureId, int avgWindId, int precipitationId, int cloudCoverId);
+    void loadData(QStringList dayData, int id, QVector<double>* list);
+    void assignData(QStringList allDataList, QList<QDate>* date, QVector<double>* avgTemp, QVector<double>* avgDew, QVector<double>* avgHumidity, QVector<double>* avgPressure, QVector<double>* avgWind, QVector<double>* precipitation, QVector<double>* cloudCover, int dateId, int avgTempId, int avgDewId, int avgHumidityId, int avgPressureId, int avgWindId, int precipitationId, int cloudCoverId);
 
 
 private slots:

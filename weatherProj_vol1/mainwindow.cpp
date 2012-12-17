@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qcustomplot.h"
 
 #include <QUrl>
 #include <QtNetwork/QNetworkRequest>
@@ -7,6 +8,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QDate>
 #include <QTextCodec>
+#include <QVector>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -119,7 +121,8 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
     //int dateId, maxTempId, avgTempId, minTempId;
     int dateId, avgTempId, avgDewId, avgHumidityId, avgPressureId, avgWindId, precipitationId, cloudCoverId;
     //QList<float> maxTemp, avgTemp, minTemp;
-    QList<float> avgTemp, avgDew, avgHumidity, avgPressure, avgWind, precipitation, cloudCover;
+    //QList<float> avgTemp, avgDew, avgHumidity, avgPressure, avgWind, precipitation, cloudCover;
+    QVector<double> avgTemp, avgDew, avgHumidity, avgPressure, avgWind, precipitation, cloudCover;
     QList<QDate> date;
 
     // assign indexes of adequate values
@@ -131,56 +134,149 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
     assignData(allDataList, &date, &avgTemp, &avgDew, &avgHumidity, &avgPressure, &avgWind, &precipitation, &cloudCover, dateId, avgTempId, avgDewId, avgHumidityId, avgPressureId, avgWindId, precipitationId, cloudCoverId);
     //ui->textEdit2->append(allDataList[0]);
 
+    QVector<double> temp_x;
+    //QVector<double> temp_y;
+
+    for (int i = 1; i <= avgTemp.count(); i++)
+    {
+        //temp_y.append(avgTemp[i]);
+        temp_x.append(i);
+    }
+
+    // temperature plot
+    ui->temp_plot->setTitle("Temperatura / Punkt rosy");
+    ui->temp_plot->setTitleFont(QFont("Arial",8));
+    ui->temp_plot->addGraph();
+    ui->temp_plot->graph(0)->setData(temp_x,avgTemp);
+    ui->temp_plot->xAxis->setLabel("dzień");
+    ui->temp_plot->yAxis->setLabel("*C");
+    ui->temp_plot->xAxis->setRange(1,31);
+    ui->temp_plot->yAxis->setRange(-20,50);
+    ui->temp_plot->xAxis->setTicks(true);
+    ui->temp_plot->xAxis->setTickLabels(true);
+    ui->temp_plot->xAxis->setTickStep(1.0);
+    ui->temp_plot->xAxis->setNumberPrecision(1);
+    ui->temp_plot->addGraph();
+    ui->temp_plot->graph(1)->setPen(QPen(Qt::red));
+    ui->temp_plot->graph(1)->setData(temp_x,avgDew);
+    //ui->temp_plot->xAxis->setLabel("dzień");
+    //ui->temp_plot->yAxis->setLabel("*C");
+    //ui->temp_plot->xAxis->setRange(1,31);
+    //ui->temp_plot->yAxis->setRange(-20,50);
+    ui->temp_plot->replot();
+
+    //pressure plot
+    ui->pressure_plot->setTitle("Ciśnienie");
+    ui->pressure_plot->setTitleFont(QFont("Arial",8));
+    ui->pressure_plot->addGraph();
+    ui->pressure_plot->graph(0)->setData(temp_x,avgPressure);
+    ui->pressure_plot->xAxis->setLabel("dzień");
+    ui->pressure_plot->yAxis->setLabel("hPa");
+    ui->pressure_plot->xAxis->setRange(1,31);
+    ui->pressure_plot->xAxis->setTicks(true);
+    ui->pressure_plot->xAxis->setTickLabels(true);
+    ui->pressure_plot->xAxis->setTickStep(1.0);
+    ui->pressure_plot->xAxis->setNumberPrecision(1);
+    ui->pressure_plot->yAxis->setRange(700,1300);
+    ui->pressure_plot->replot();
+
+    //humidity plot
+    ui->humidity_plot->setTitle("Wilgotność");
+    ui->humidity_plot->setTitleFont(QFont("Arial",8));
+    ui->humidity_plot->addGraph();
+    ui->humidity_plot->graph(0)->setData(temp_x,avgHumidity);
+    ui->humidity_plot->xAxis->setLabel("dzień");
+    ui->humidity_plot->yAxis->setLabel("%");
+    ui->humidity_plot->xAxis->setRange(1,31);
+    ui->humidity_plot->xAxis->setTicks(true);
+    ui->humidity_plot->xAxis->setTickLabels(true);
+    ui->humidity_plot->xAxis->setTickStep(1.0);
+    ui->humidity_plot->xAxis->setNumberPrecision(1);
+    ui->humidity_plot->yAxis->setRange(0,100);
+    ui->humidity_plot->replot();
+
+    //downpour plot
+    ui->downpour_plot->setTitle("Wilgotność");
+    ui->downpour_plot->setTitleFont(QFont("Arial",8));
+    QCPBars *bars = new QCPBars(ui->downpour_plot->xAxis, ui->downpour_plot->yAxis);
+    ui->downpour_plot->addPlottable(bars);
+    bars->setData(temp_x,avgHumidity);
+    ui->downpour_plot->xAxis->setLabel("dzień");
+    ui->downpour_plot->yAxis->setLabel("%");
+    ui->downpour_plot->xAxis->setRange(1,31);
+    ui->downpour_plot->xAxis->setTicks(true);
+    ui->downpour_plot->xAxis->setTickLabels(true);
+    ui->downpour_plot->xAxis->setTickStep(1.0);
+    ui->downpour_plot->xAxis->setNumberPrecision(1);
+    ui->downpour_plot->yAxis->setRange(0,100);
+    ui->downpour_plot->rescaleAxes();
+    ui->downpour_plot->replot();
+
+    //wind plot
+    ui->wind_plot->setTitle("Siła wiatru");
+    ui->wind_plot->setTitleFont(QFont("Arial",8));
+    ui->wind_plot->addGraph();
+    ui->wind_plot->graph(0)->setData(temp_x,avgWind);
+    ui->wind_plot->xAxis->setLabel("dzień");
+    ui->wind_plot->yAxis->setLabel("km/h");
+    ui->wind_plot->xAxis->setRange(1,31);
+    ui->wind_plot->xAxis->setTicks(true);
+    ui->wind_plot->xAxis->setTickLabels(true);
+    ui->wind_plot->xAxis->setTickStep(1.0);
+    ui->wind_plot->xAxis->setNumberPrecision(1);
+    ui->wind_plot->yAxis->setRange(0,300);
+    ui->wind_plot->replot();
+
     //ui->textEdit2->append("Srednie cisnienie:");
-    foreach(QDate d, date)
-    {
-        ui->textEdit2->append(d.toString("dd-MM-yyyy"));
-    }
-    if (!avgTemp.isEmpty())
-    {
-        ui->textEdit2->append("Średnia temperatura:");
-        foreach(float n,avgTemp)
-        {
-            if (n == 9999)
-            {
-                ui->textEdit2->append("Brak danych");
-            }
-            else
-            {
-                ui->textEdit2->append(QString::number(n));
-            }
-        }
-    }
-    if (!avgPressure.isEmpty())
-    {
-        ui->textEdit2->append("Średnie ciśnienie:");
-        foreach(float n,avgPressure)
-        {
-            if (n == 9999)
-            {
-                ui->textEdit2->append("Brak danych");
-            }
-            else
-            {
-                ui->textEdit2->append(QString::number(n));
-            }
-        }
-    }
-    if (!cloudCover.isEmpty())
-    {
-        ui->textEdit2->append("Zachmurzenie:");
-        foreach(float n,cloudCover)
-        {
-            if (n == 9999)
-            {
-                ui->textEdit2->append("Brak danych");
-            }
-            else
-            {
-                ui->textEdit2->append(QString::number(n));
-            }
-        }
-    }
+//    foreach(QDate d, date)
+//    {
+//        ui->textEdit2->append(d.toString("dd-MM-yyyy"));
+//    }
+//    if (!avgTemp.isEmpty())
+//    {
+//        ui->textEdit2->append("Średnia temperatura:");
+//        foreach(float n,avgTemp)
+//        {
+//            if (n == 9999)
+//            {
+//                ui->textEdit2->append("Brak danych");
+//            }
+//            else
+//            {
+//                ui->textEdit2->append(QString::number(n));
+//            }
+//        }
+//    }
+//    if (!avgPressure.isEmpty())
+//    {
+//        ui->textEdit2->append("Średnie ciśnienie:");
+//        foreach(float n,avgPressure)
+//        {
+//            if (n == 9999)
+//            {
+//                ui->textEdit2->append("Brak danych");
+//            }
+//            else
+//            {
+//                ui->textEdit2->append(QString::number(n));
+//            }
+//        }
+//    }
+//    if (!cloudCover.isEmpty())
+//    {
+//        ui->textEdit2->append("Zachmurzenie:");
+//        foreach(float n,cloudCover)
+//        {
+//            if (n == 9999)
+//            {
+//                ui->textEdit2->append("Brak danych");
+//            }
+//            else
+//            {
+//                ui->textEdit2->append(QString::number(n));
+//            }
+//        }
+//    }
 
 //    ui->textEdit2->append(QString::number(dateId)); //0 ok
 //    ui->textEdit2->append(QString::number(avgTempId)); //2 ok
@@ -245,9 +341,13 @@ void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgD
 //           dateId, avgTempId, avgDewId, avgHumidityId, avgPressureId, avgWindId, precipitationId, cloudCoverId);
 
 //void MainWindow::assignData(QStringList allDataList, QList<float>* maxTemp, QList<float>* avgTemp, QList<float>* minTemp, QList<QDate>* date, int dateId, int maxTempId, int avgTempId, int minTempId)
-void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QList<float>* avgTemp, QList<float>* avgDew,
-                            QList<float>* avgHumidity, QList<float>* avgPressure, QList<float>* avgWind, QList<float>* precipitation,
-                            QList<float>* cloudCover, int dateId, int avgTempId, int avgDewId, int avgHumidityId, int avgPressureId,
+//void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QList<float>* avgTemp, QList<float>* avgDew,
+//                            QList<float>* avgHumidity, QList<float>* avgPressure, QList<float>* avgWind, QList<float>* precipitation,
+//                            QList<float>* cloudCover, int dateId, int avgTempId, int avgDewId, int avgHumidityId, int avgPressureId,
+//                            int avgWindId, int precipitationId, int cloudCoverId)
+void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector<double>* avgTemp, QVector<double>* avgDew,
+                            QVector<double>* avgHumidity, QVector<double>* avgPressure, QVector<double>* avgWind, QVector<double>* precipitation,
+                            QVector<double>* cloudCover, int dateId, int avgTempId, int avgDewId, int avgHumidityId, int avgPressureId,
                             int avgWindId, int precipitationId, int cloudCoverId)
 {
     for (int i =1; i < allDataList.length(); i++)
@@ -278,23 +378,25 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QList<f
     }
 }
 
-void MainWindow::loadData(QStringList dayData, int id, QList<float>* list)
+void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
 {
     bool success;
     if (dayData[id].isEmpty())
     {
-        list->push_back(9999);
+        //list->push_back(9999);
+        list->append(9999);
     }
     else
     {
-        float temp = dayData[id].toFloat(&success);
+       // float temp = dayData[id].toFloat(&success);
+        double temp = dayData[id].toDouble(&success);
         if (success)
         {
-            list->push_back(temp);
+            list->append(temp);
         }
         else
         {
-            list->push_back(9999);
+            list->append(9999);
         }
     }
 }
