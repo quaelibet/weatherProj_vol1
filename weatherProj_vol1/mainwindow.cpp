@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "qcustomplot.h"
+#include "plots.h"
 
 #include <QUrl>
 #include <QtNetwork/QNetworkRequest>
@@ -143,6 +144,11 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
         temp_x.append(i);
     }
 
+    // show plots window
+   // Plots *plots = new Plots(this,temp_x,avgTemp,avgDew);
+   // plots->show();
+
+
     // temperature plot
     ui->temp_plot->setTitle("Temperatura / Punkt rosy");
     ui->temp_plot->setTitleFont(QFont("Arial",8));
@@ -181,19 +187,19 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
     ui->pressure_plot->replot();
 
     //humidity plot
-    ui->humidity_plot->setTitle("Wilgotność");
-    ui->humidity_plot->setTitleFont(QFont("Arial",8));
-    ui->humidity_plot->addGraph();
-    ui->humidity_plot->graph(0)->setData(temp_x,avgHumidity);
-    ui->humidity_plot->xAxis->setLabel("dzień");
-    ui->humidity_plot->yAxis->setLabel("%");
-    ui->humidity_plot->xAxis->setRange(1,31);
-    ui->humidity_plot->xAxis->setTicks(true);
-    ui->humidity_plot->xAxis->setTickLabels(true);
-    ui->humidity_plot->xAxis->setTickStep(1.0);
-    ui->humidity_plot->xAxis->setNumberPrecision(1);
-    ui->humidity_plot->yAxis->setRange(0,100);
-    ui->humidity_plot->replot();
+//    ui->humidity_plot->setTitle("Wilgotność");
+//    ui->humidity_plot->setTitleFont(QFont("Arial",8));
+//    ui->humidity_plot->addGraph();
+//    ui->humidity_plot->graph(0)->setData(temp_x,avgHumidity);
+//    ui->humidity_plot->xAxis->setLabel("dzień");
+//    ui->humidity_plot->yAxis->setLabel("%");
+//    ui->humidity_plot->xAxis->setRange(1,31);
+//    ui->humidity_plot->xAxis->setTicks(true);
+//    ui->humidity_plot->xAxis->setTickLabels(true);
+//    ui->humidity_plot->xAxis->setTickStep(1.0);
+//    ui->humidity_plot->xAxis->setNumberPrecision(1);
+//    ui->humidity_plot->yAxis->setRange(0,100);
+//    ui->humidity_plot->replot();
 
     //downpour plot
     ui->downpour_plot->setTitle("Wilgotność");
@@ -213,19 +219,19 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
     ui->downpour_plot->replot();
 
     //wind plot
-    ui->wind_plot->setTitle("Siła wiatru");
-    ui->wind_plot->setTitleFont(QFont("Arial",8));
-    ui->wind_plot->addGraph();
-    ui->wind_plot->graph(0)->setData(temp_x,avgWind);
-    ui->wind_plot->xAxis->setLabel("dzień");
-    ui->wind_plot->yAxis->setLabel("km/h");
-    ui->wind_plot->xAxis->setRange(1,31);
-    ui->wind_plot->xAxis->setTicks(true);
-    ui->wind_plot->xAxis->setTickLabels(true);
-    ui->wind_plot->xAxis->setTickStep(1.0);
-    ui->wind_plot->xAxis->setNumberPrecision(1);
-    ui->wind_plot->yAxis->setRange(0,300);
-    ui->wind_plot->replot();
+//    ui->wind_plot->setTitle("Siła wiatru");
+//    ui->wind_plot->setTitleFont(QFont("Arial",8));
+//    ui->wind_plot->addGraph();
+//    ui->wind_plot->graph(0)->setData(temp_x,avgWind);
+//    ui->wind_plot->xAxis->setLabel("dzień");
+//    ui->wind_plot->yAxis->setLabel("km/h");
+//    ui->wind_plot->xAxis->setRange(1,31);
+//    ui->wind_plot->xAxis->setTicks(true);
+//    ui->wind_plot->xAxis->setTickLabels(true);
+//    ui->wind_plot->xAxis->setTickStep(1.0);
+//    ui->wind_plot->xAxis->setNumberPrecision(1);
+//    ui->wind_plot->yAxis->setRange(0,300);
+//    ui->wind_plot->replot();
 
     //ui->textEdit2->append("Srednie cisnienie:");
 //    foreach(QDate d, date)
