@@ -46,7 +46,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+/**
+ * @brief MainWindow::on_showData1_clicked
+ * Gets data from inputs and sends request (left panel)
+ */
 void MainWindow::on_showData1_clicked()
 {
     // read chosen values
@@ -85,10 +88,13 @@ void MainWindow::on_showData1_clicked()
     }
 }
 
+/**
+ * @brief MainWindow::on_showData2_clicked
+ * Gets data from inputs and sends request (right panel)
+ */
 void MainWindow::on_showData2_clicked()
 {
-    // read chosen values
-    //QString city = ui->cityCombo2->currentText();
+    // read chosen values    
     QString city = ui->cityLine2->text();
     // check if city if set
     if (city == "" || city.contains(".") || city.contains("/"))
@@ -99,12 +105,10 @@ void MainWindow::on_showData2_clicked()
     }
     else
     {
-        QString country = ui->countryCombo2->currentText();
-        //QString month = ui->monthCombo2->currentText();
+        QString country = ui->countryCombo2->currentText();        
         QString month = QString::number(ui->monthCombo1->currentIndex()+1);
         QString year = ui->yearCombo2->currentText();
 
-        //QString stream = "http://www.wunderground.com/history/airport/EPKT/"+year+"/"+month+"/1/MonthlyHistory.html?req_city="+city+"&req_state=&req_statename="+country+"&format=1";
         QString stream = "http://www.wunderground.com/history/airport/"+city+"/"+year+"/"+month+"/1/MonthlyHistory.html?req_city="+city+"&req_state=&req_statename="+country+"&format=1";
 
         QNetworkAccessManager* manager = new QNetworkAccessManager(this);
@@ -113,7 +117,6 @@ void MainWindow::on_showData2_clicked()
         QNetworkRequest *req = new QNetworkRequest(url);
         req->setRawHeader("Accept-Language", "en-us,en;q=0.5");
 
-        //QNetworkReply* reply = manager->get(QNetworkRequest(url));
         QNetworkReply* reply = manager->get(*req);
         connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished2(QNetworkReply*)));
     }
@@ -129,6 +132,7 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
     {
         //ui->textEdit1->append(":(");
         QMessageBox msgBox;
+        msgBox.setWindowTitle("!");
         msgBox.setText("Wygląda na to, że wystąpił problem z połączeniem internetowym...");
         msgBox.exec();
     }
@@ -137,6 +141,7 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
         if (allDataList.length() < 2)
         {
             QMessageBox msgBox;
+            msgBox.setWindowTitle("!");
             msgBox.setText("Brak danych dla podanej lokalizacji");
             msgBox.exec();
         }
@@ -151,6 +156,11 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
     }
 }
 
+/**
+ * @brief MainWindow::replyFinished2
+ * @param reply
+ * Assigns data to plots (right panel)
+ */
 void MainWindow::replyFinished2(QNetworkReply* reply)
 {    
     QStringList allDataList = processReply(reply);
@@ -161,10 +171,10 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
     QList<QDate> date;
 
     if (allDataList.length() == 0)
-    {
-        //ui->textEdit1->append(":(");
+    {        
         QMessageBox msgBox;
         msgBox.setText("Wygląda na to, że wystąpił problem z połączeniem internetowym...");
+        msgBox.setWindowTitle("!");
         msgBox.exec();
     }
     else
@@ -249,72 +259,15 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
     //    ui->wind_plot->yAxis->setRange(0,300);
     //    ui->wind_plot->replot();
 
-        //ui->textEdit2->append("Srednie cisnienie:");
-    //    foreach(QDate d, date)
-    //    {
-    //        ui->textEdit2->append(d.toString("dd-MM-yyyy"));
-    //    }
-    //    if (!avgTemp.isEmpty())
-    //    {
-    //        ui->textEdit2->append("Średnia temperatura:");
-    //        foreach(float n,avgTemp)
-    //        {
-    //            if (n == 9999)
-    //            {
-    //                ui->textEdit2->append("Brak danych");
-    //            }
-    //            else
-    //            {
-    //                ui->textEdit2->append(QString::number(n));
-    //            }
-    //        }
-    //    }
-    //    if (!avgPressure.isEmpty())
-    //    {
-    //        ui->textEdit2->append("Średnie ciśnienie:");
-    //        foreach(float n,avgPressure)
-    //        {
-    //            if (n == 9999)
-    //            {
-    //                ui->textEdit2->append("Brak danych");
-    //            }
-    //            else
-    //            {
-    //                ui->textEdit2->append(QString::number(n));
-    //            }
-    //        }
-    //    }
-    //    if (!cloudCover.isEmpty())
-    //    {
-    //        ui->textEdit2->append("Zachmurzenie:");
-    //        foreach(float n,cloudCover)
-    //        {
-    //            if (n == 9999)
-    //            {
-    //                ui->textEdit2->append("Brak danych");
-    //            }
-    //            else
-    //            {
-    //                ui->textEdit2->append(QString::number(n));
-    //            }
-    //        }
-    //    }
-
-    //    ui->textEdit2->append(QString::number(dateId)); //0 ok
-    //    ui->textEdit2->append(QString::number(avgTempId)); //2 ok
-    //    ui->textEdit2->append(QString::number(avgDewId)); //5 ok
-    //    ui->textEdit2->append(QString::number(avgHumidityId)); //0 :( 8
-    //    ui->textEdit2->append(QString::number(avgPressureId)); //1 :( 11
-    //    ui->textEdit2->append(QString::number(avgWindId)); //0 :( 17
-    //    ui->textEdit2->append(QString::number(precipitationId));//19
-    //    ui->textEdit2->append(QString::number(cloudCoverId));//0 :( 20
-
-
-        //ui->textEdit2->append(QString::number(minTempId));
     }
 }
 
-//QList<QStringList> MainWindow::processReply(QNetworkReply* reply)
+/**
+ * @brief MainWindow::processReply
+ * @param reply
+ * @return QStringList temp
+ * Processes network reply
+ */
 QStringList MainWindow::processReply(QNetworkReply* reply)
 {
     QByteArray rep = reply->readAll();
@@ -322,18 +275,8 @@ QStringList MainWindow::processReply(QNetworkReply* reply)
     // remove headers ..
     // remove data to first line break!
     QStringList temp = str.split(QRegExp("(\\r\\n)|(\\n\\r)|\\r|\\n"), QString::SkipEmptyParts);
- //   QString weatherData = "";
- //   QList<QStringList> allData;
- //   for (int i =1; i < temp.length(); i++)
- //   {
- //       QStringList dayData = temp[i].split(",");
- //       allData.push_back(dayData);
- //   }
-    // separate data
-    // separate on linebreaks
-    // next separate on commas
-     return temp;
- //   return allData;
+
+    return temp;
 }
 
 /**
@@ -462,6 +405,7 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
     if (allDataList.length() < 2)
     {
         QMessageBox msgBox;
+        msgBox.setWindowTitle("!");
         msgBox.setText("Brak danych dla podanej lokalizacji");
         msgBox.exec();
     }
@@ -535,6 +479,7 @@ void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVe
     if (allDataList.length() < 2)
     {
         QMessageBox msgBox;
+        msgBox.setWindowTitle("!");
         msgBox.setText("Brak danych dla podanej lokalizacji");
         msgBox.exec();
     }
@@ -567,6 +512,14 @@ void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVe
     }
 }
 
+/**
+ * @brief MainWindow::loadData
+ * @param dayData
+ * @param id
+ * @param list
+ * Loads data from given day from column pointed by id to adequate vector
+ * When column value is empty - 9999 is loaded to vector - it's important to always have some value remembered for given day
+ */
 void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
 {
     bool success;
@@ -590,6 +543,14 @@ void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
     }
 }
 
+/**
+ * @brief MainWindow::loadDataForSummary
+ * @param dayData
+ * @param id
+ * @param list
+ * Loads data from given day from column pointed by id to adequate vector
+ * When column value is empty - nothing is loaded to vector
+ */
 void MainWindow::loadDataForSummary(QStringList dayData, int id, QVector<double>* list)
 {
     bool success;
@@ -612,6 +573,10 @@ void MainWindow::loadDataForSummary(QStringList dayData, int id, QVector<double>
     }
 }
 
+/**
+ * @brief MainWindow::on_pushButton_clicked
+ * Gets data from inputs and sends request (right panel)
+ */
 void MainWindow::on_pushButton_clicked()
 {
     // read chosen values
@@ -620,6 +585,7 @@ void MainWindow::on_pushButton_clicked()
     if (city == "" || city.contains(".") || city.contains("/"))
     {
         QMessageBox msgBox;
+        msgBox.setWindowTitle("!");
         msgBox.setText("Brak podanej lokalizacji!");
         msgBox.exec();
     }
@@ -671,70 +637,46 @@ void MainWindow::replyFinished4(QNetworkReply* reply)
                    dateId, minTempId, avgTempId, maxTempId, minDewId, avgDewId, maxDewId, minHumidityId, avgHumidityId,
                    maxHumidityId, minPressureId, avgPressureId, maxPressureId, avgWindId, maxWindId, precipitationId, cloudCoverId);
 
-    double monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
+    QString monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
             monthMaxHumidity, monthMinPressure, monthAvgPressure, monthMaxPressure, monthAvgWind, monthMaxWind, monthPrecipitation, monthCloudCover;
 
-
-    // show plots window
-    //Plots *plots = new Plots(this);
-    //plots->show();
-    QString info = "";
-
     // temperature summary
-    qSort(minTemp);
-    monthMinTemp = minTemp.first();
-    qSort(maxTemp);
-    monthMaxTemp = maxTemp.last();
-    monthAvgTemp = 0;
-    for (int i =0; i < avgTemp.count(); i++)
-    {
-        monthAvgTemp +=avgTemp[i];
-    }
-    monthAvgTemp = monthAvgTemp/avgTemp.count();
-    info.append("Temperatura min.: "+QString::number(monthMinTemp)+"\nTemperatura śr.: "+QString::number(monthAvgTemp)+
-                "\nTemperatura maks.: "+QString::number(monthMaxTemp)+"\n\n");
-
+    monthMinTemp = getMin(minTemp);
+    monthAvgTemp = getAvg(avgTemp);
+    monthMaxTemp = getMax(maxTemp);
     // dew summary
-    qSort(minDew);
-    monthMinDew = minDew.first();
-    qSort(maxDew);
-    monthMaxDew = maxDew.last();
-    monthAvgDew = 0;
-    for (int i =0; i < avgDew.count(); i++)
-    {
-        monthAvgDew +=avgDew[i];
-    }
-    monthAvgDew = monthAvgDew/avgDew.count();
-    info.append("Punkt rosy - min.: "+QString::number(monthMinDew)+"\nPunkt rosy - śr.: "+QString::number(monthAvgDew)+
-                "\nPunkt rosy - maks.: "+QString::number(monthMaxDew)+"\n\n");
-
+    monthMinDew = getMin(minDew);
+    monthAvgDew = getAvg(avgDew);
+    monthMaxDew = getMax(maxDew);
     // humidity summary
-    qSort(minHumidity);
-    monthMinHumidity = minHumidity.first();
-    qSort(maxHumidity);
-    monthMaxHumidity = maxHumidity.last();
-    monthAvgHumidity = 0;
-    for (int i =0; i < avgHumidity.count(); i++)
-    {
-        monthAvgHumidity +=avgHumidity[i];
-    }
-    monthAvgHumidity = monthAvgHumidity/avgHumidity.count();
-    info.append("Punkt rosy - min.: "+QString::number(monthMinDew)+"\nPunkt rosy - śr.: "+QString::number(monthAvgDew)+
-                "\nPunkt rosy - maks.: "+QString::number(monthMaxDew)+"\n\n");
+    monthMinHumidity = getMin(minHumidity);
+    monthAvgHumidity = getAvg(avgHumidity);
+    monthMaxHumidity = getMax(maxHumidity);
     // pressure summary
-
+    monthMinPressure = getMin(minPressure);
+    monthAvgPressure = getAvg(avgPressure);
+    monthMaxPressure = getMax(maxPressure);
     // wind summary
-
+    monthAvgWind = getAvg(avgWind);
+    monthMaxWind = getMax(maxWind);
     // precipitation summary
-
+    monthPrecipitation = getAvg(precipitation);
     // cloud cover summary
+    monthCloudCover = getAvg(cloudCover);
 
-    QMessageBox msgBox;
+  /*  QMessageBox msgBox;
     msgBox.setWindowTitle(" ");
     msgBox.setTextFormat(Qt::RichText);
     msgBox.setText("Podsumowanie miesiąca:");
     msgBox.setInformativeText(info);
-    msgBox.exec();
+    msgBox.exec();*/
+
+
+    // show plots window
+    Plots *plots = new Plots(this, monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
+                             monthMaxHumidity, monthMinPressure, monthAvgPressure, monthMaxPressure, monthAvgWind, monthMaxWind);
+    plots->setWindowTitle("Podsumowanie miesiąca");
+    plots->show();
 
 
 }
@@ -746,9 +688,15 @@ void MainWindow::replyFinished4(QNetworkReply* reply)
  */
 void MainWindow::replyFinished3(QNetworkReply* reply)
 {
-
+    // no need for this method - replyFinished4 should be called instead
 }
 
+/**
+ * @brief MainWindow::getMin
+ * @param vector
+ * @return QString min
+ * Finds minimum value in given vector and returns it as QString
+ */
 QString MainWindow::getMin(QVector<double> vector)
 {
     double min;
@@ -758,6 +706,12 @@ QString MainWindow::getMin(QVector<double> vector)
     return QString::number(min);
 }
 
+/**
+ * @brief MainWindow::getMax
+ * @param vector
+ * @return QString max
+ * Finds maximum value in given vector and returns it as QString
+ */
 QString MainWindow::getMax(QVector<double> vector)
 {
     double max;
@@ -767,6 +721,12 @@ QString MainWindow::getMax(QVector<double> vector)
     return QString::number(max);
 }
 
+/**
+ * @brief MainWindow::getAvg
+ * @param vector
+ * @return QString avg
+ * Finds average value in given vector and returns it as QString
+ */
 QString MainWindow::getAvg(QVector<double> vector)
 {
     double avg = 0;
