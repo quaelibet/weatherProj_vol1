@@ -36,7 +36,14 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="cityCombo1"/>
+            <widget class="QLineEdit" name="cityLine1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -142,13 +149,6 @@
         <item row="4" column="0" colspan="2">
          <widget class="QCustomPlot" name="pressure_plot" native="true"/>
         </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QPushButton" name="showData2">
-          <property name="text">
-           <string>Pokaż dane</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QWidget" name="widget_11" native="true">
           <property name="sizePolicy">
@@ -194,7 +194,14 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="cityCombo2"/>
+            <widget class="QLineEdit" name="cityLine2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -216,6 +223,20 @@
             <widget class="QComboBox" name="yearCombo2"/>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="showData2">
+          <property name="text">
+           <string>Pokaż dane</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Pokaż podsumowanie</string>
+          </property>
          </widget>
         </item>
        </layout>

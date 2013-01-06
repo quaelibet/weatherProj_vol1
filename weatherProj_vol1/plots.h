@@ -12,7 +12,7 @@ class Plots : public QDialog
     Q_OBJECT
     
 public:
-    explicit Plots(QWidget *parent = 0, QVector<double> x=0, QVector<double> y=0, QVector<double> y2=0);
+    explicit Plots(QWidget *parent = 0);
     ~Plots();
     
 private:
