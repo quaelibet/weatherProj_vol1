@@ -47,14 +47,12 @@ public:
 
 private slots:
     void on_showData1_clicked();
-    void replyFinished1(QNetworkReply* reply);
-    void replyFinished2(QNetworkReply* reply);
-    void replyFinished3(QNetworkReply* reply);
-    void replyFinished4(QNetworkReply* reply);
-
     void on_showData2_clicked();
-
+    void on_pushButton1_clicked();
     void on_pushButton_clicked();
+    void replyFinished1(QNetworkReply* reply);
+    void replyFinished2(QNetworkReply* reply);    
+    void replyFinished4(QNetworkReply* reply);
 
 private:
     Ui::MainWindow *ui;
