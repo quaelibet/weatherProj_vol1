@@ -43,6 +43,7 @@ public:
     QString getMin(QVector<double> vector);
     QString getMax(QVector<double> vector);
     QString getAvg(QVector<double> vector);
+    void replacePolishDiacritics(QString*word);
 
 
 private slots:

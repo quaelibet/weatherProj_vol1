@@ -69,9 +69,13 @@ MainWindow::~MainWindow()
  * @param cloudCoverId
  * Assigns indexes needed for collecting data for plots
  */
-void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgDewId, int*avgHumidityId, int*avgPressureId, int*avgWindId, int*precipitationId, int*cloudCoverId)
+void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgDewId, int*avgHumidityId, int*avgPressureId, int*avgWindId,
+                             int*precipitationId, int*cloudCoverId)
 {
-    // header: CET,Max TemperatureC,Mean TemperatureC,Min TemperatureC,Dew PointC,MeanDew PointC,Min DewpointC,Max Humidity, Mean Humidity, Min Humidity, Max Sea Level PressurehPa, Mean Sea Level PressurehPa, Min Sea Level PressurehPa, Max VisibilityKm, Mean VisibilityKm, Min VisibilitykM, Max Wind SpeedKm/h, Mean Wind SpeedKm/h, Max Gust SpeedKm/h,Precipitationmm, CloudCover, Events,WindDirDegrees
+    // header: CET,Max TemperatureC,Mean TemperatureC,Min TemperatureC,Dew PointC,MeanDew PointC,Min DewpointC,Max Humidity, Mean Humidity,
+    // Min Humidity, Max Sea Level PressurehPa, Mean Sea Level PressurehPa, Min Sea Level PressurehPa, Max VisibilityKm, Mean VisibilityKm,
+    // Min VisibilitykM, Max Wind SpeedKm/h, Mean Wind SpeedKm/h, Max Gust SpeedKm/h,Precipitationmm, CloudCover, Events,WindDirDegrees
+
     QStringList indexData = header.split(",");
     for (int i = 0; i < indexData.length(); i++)
     {
@@ -80,10 +84,8 @@ void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgD
 
     for (int i = 0; i < indexData.length(); i++)
     {
-        if (indexData[i] == "CET") { *dateId = i; }
-        //else if (indexData[i] == "Max TemperatureC") { *maxTempId = i; }
-        else if (indexData[i] == "Mean TemperatureC") { *avgTempId = i; }
-        //else if (indexData[i] == "Min TemperatureC") { *minTempId = i; }
+        if (indexData[i] == "CET") { *dateId = i; }        
+        else if (indexData[i] == "Mean TemperatureC") { *avgTempId = i; }        
         else if (indexData[i] == "MeanDew PointC") { *avgDewId = i; }
         else if (indexData[i] == "Mean Humidity") { *avgHumidityId = i; }
         else if (indexData[i] == "Mean Sea Level PressurehPa") { *avgPressureId = i; }
@@ -187,9 +189,9 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
         msgBox.exec();
     }
     else
-    {
+    {        
         for (int i =1; i < allDataList.length(); i++)
-        {
+        {            
             QStringList dayData = allDataList[i].split(",");
             // assign data to tables
             if (avgTempId) { loadData(dayData, avgTempId, avgTemp); }
@@ -202,7 +204,7 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
 
             QDate d = QDate::fromString(dayData[dateId],"yyyy-M-d");
             date->push_back(d);
-        }
+        }        
     }
 }
 
@@ -295,19 +297,17 @@ void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVe
  * @param id
  * @param list
  * Loads data from given day from column pointed by id to adequate vector
- * When column value is empty - 9999 is loaded to vector - it's important to always have some value remembered for given day
+ * When column value is empty - 0 is loaded to vector - it's important to always have some value remembered for given day
  */
 void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
 {
     bool success;
     if (dayData[id].isEmpty())
-    {
-        //list->push_back(9999);
-        list->append(9999);
+    {        
+        list->append(0);
     }
     else
-    {
-       // float temp = dayData[id].toFloat(&success);
+    {       
         double temp = dayData[id].toDouble(&success);
         if (success)
         {
@@ -315,7 +315,7 @@ void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
         }
         else
         {
-            list->append(9999);
+            list->append(0);
         }
     }
 }
@@ -358,7 +358,11 @@ void MainWindow::loadDataForSummary(QStringList dayData, int id, QVector<double>
  */
 QString MainWindow::getMin(QVector<double> vector)
 {
-    double min;
+    if (vector.count() == 0)
+    {
+        return "Brak danych";
+    }
+    double min;    
     qSort(vector);
     min = vector.first();
 
@@ -373,6 +377,10 @@ QString MainWindow::getMin(QVector<double> vector)
  */
 QString MainWindow::getMax(QVector<double> vector)
 {
+    if (vector.count() == 0)
+    {
+        return "Brak danych";
+    }
     double max;
     qSort(vector);
     max = vector.last();
@@ -388,8 +396,11 @@ QString MainWindow::getMax(QVector<double> vector)
  */
 QString MainWindow::getAvg(QVector<double> vector)
 {
+    if (vector.count() == 0)
+    {
+        return "Brak danych";
+    }
     double avg = 0;
-
     for (int i =0; i < vector.count(); i++)
     {
         avg +=vector[i];
@@ -397,6 +408,24 @@ QString MainWindow::getAvg(QVector<double> vector)
     avg = avg/vector.count();
 
     return QString::number(avg);
+}
+
+/**
+ * @brief MainWindow::replacePolishDiacritics
+ * @param word
+ * Replaces polish diactritics in given QString
+ */
+void MainWindow::replacePolishDiacritics(QString*word)
+{
+    word->replace("ą","a");
+    word->replace("ć","c");
+    word->replace("ę","e");
+    word->replace("ł","l");
+    word->replace("ń","n");
+    word->replace("ó","o");
+    word->replace("ś","s");
+    word->replace("ź","z");
+    word->replace("ż","z");
 }
 
 /**
@@ -422,8 +451,7 @@ QStringList MainWindow::processReply(QNetworkReply* reply)
  */
 void MainWindow::on_showData1_clicked()
 {
-    // read chosen values
-    //QString city = ui->cityCombo1->currentText();
+    // read chosen values    
     QString city = ui->cityLine1->text();
     // check if city if set
     if (city == "" || city.contains(".") || city.contains("/"))
@@ -435,6 +463,9 @@ void MainWindow::on_showData1_clicked()
     }
     else
     {
+        // strip city of polish letters
+        replacePolishDiacritics(&city);
+
         QString country = ui->countryCombo1->currentText();
         //QString month = ui->monthCombo1->currentText();
         QString month = QString::number(ui->monthCombo1->currentIndex()+1);
@@ -450,9 +481,7 @@ void MainWindow::on_showData1_clicked()
 
         QNetworkReply* reply = manager->get(*req);       
 
-        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished1(QNetworkReply*)));
-
-        //ui->textEdit1->append(temp);
+        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished1(QNetworkReply*)));        
     }
 }
 
@@ -495,10 +524,16 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
         }
 
         // temperature plot
+        ui->temp_plot_l->clearGraphs();
         ui->temp_plot_l->setTitle("Temperatura / Punkt rosy");
         ui->temp_plot_l->setTitleFont(QFont("Arial",8));
+        ui->temp_plot_l->legend->setVisible(true);
+        ui->temp_plot_l->legend->setFont(QFont("Arial",7));
+        ui->temp_plot_l->legend->setPositionStyle(QCPLegend::psManual); //psBottomRight);
+        ui->temp_plot_l->legend->setPosition(QPoint(350,0));
         ui->temp_plot_l->addGraph();
         ui->temp_plot_l->graph(0)->setData(temp_x,avgTemp);
+        ui->temp_plot_l->graph(0)->setName("temperatura");
         ui->temp_plot_l->xAxis->setLabel("dzień");
         ui->temp_plot_l->yAxis->setLabel("*C");
         ui->temp_plot_l->xAxis->setRange(1,31);
@@ -510,9 +545,11 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
         ui->temp_plot_l->addGraph();
         ui->temp_plot_l->graph(1)->setPen(QPen(Qt::red));
         ui->temp_plot_l->graph(1)->setData(temp_x,avgDew);
+        ui->temp_plot_l->graph(1)->setName("punkt rosy");
         ui->temp_plot_l->replot();
 
         //pressure plot
+        ui->pressure_plot_l->clearGraphs();
         ui->pressure_plot_l->setTitle("Ciśnienie");
         ui->pressure_plot_l->setTitleFont(QFont("Arial",8));
         ui->pressure_plot_l->addGraph();
@@ -528,6 +565,7 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
         ui->pressure_plot_l->replot();
 
         //humidity plot
+        ui->downpour_plot_l->clearPlottables();
         ui->downpour_plot_l->setTitle("Wilgotność");
         ui->downpour_plot_l->setTitleFont(QFont("Arial",8));
         QCPBars *bars = new QCPBars(ui->downpour_plot_l->xAxis, ui->downpour_plot_l->yAxis);
@@ -542,23 +580,7 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
         ui->downpour_plot_l->xAxis->setNumberPrecision(1);
         ui->downpour_plot_l->yAxis->setRange(0,100);
         ui->downpour_plot_l->rescaleAxes();
-        ui->downpour_plot_l->replot();
-
-        //wind plot
-    //    ui->wind_plot_l->setTitle("Siła wiatru");
-    //    ui->wind_plot_l->setTitleFont(QFont("Arial",8));
-    //    ui->wind_plot_l->addGraph();
-    //    ui->wind_plot_l->graph(0)->setData(temp_x,avgWind);
-    //    ui->wind_plot_l->xAxis->setLabel("dzień");
-    //    ui->wind_plot_l->yAxis->setLabel("km/h");
-    //    ui->wind_plot_l->xAxis->setRange(1,31);
-    //    ui->wind_plot_l->xAxis->setTicks(true);
-    //    ui->wind_plot_l->xAxis->setTickLabels(true);
-    //    ui->wind_plot_l->xAxis->setTickStep(1.0);
-    //    ui->wind_plot_l->xAxis->setNumberPrecision(1);
-    //    ui->wind_plot_l->yAxis->setRange(0,300);
-    //    ui->wind_plot_l->replot();
-
+        ui->downpour_plot_l->replot();        
     }
 }
 
@@ -580,6 +602,9 @@ void MainWindow::on_showData2_clicked()
     }
     else
     {
+        // strip city of polish letters
+        replacePolishDiacritics(&city);
+
         QString country = ui->countryCombo2->currentText();        
         QString month = QString::number(ui->monthCombo2->currentIndex()+1);
         QString year = ui->yearCombo2->currentText();
@@ -636,10 +661,16 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
         }
 
         // temperature plot
+        ui->temp_plot->clearGraphs();
         ui->temp_plot->setTitle("Temperatura / Punkt rosy");
         ui->temp_plot->setTitleFont(QFont("Arial",8));
+        ui->temp_plot->legend->setVisible(true);
+        ui->temp_plot->legend->setFont(QFont("Arial",7));
+        ui->temp_plot->legend->setPositionStyle(QCPLegend::psManual); //psBottomRight);
+        ui->temp_plot->legend->setPosition(QPoint(350,0));
         ui->temp_plot->addGraph();
         ui->temp_plot->graph(0)->setData(temp_x,avgTemp);
+        ui->temp_plot->graph(0)->setName("temperatura");
         ui->temp_plot->xAxis->setLabel("dzień");
         ui->temp_plot->yAxis->setLabel("*C");
         ui->temp_plot->xAxis->setRange(1,31);
@@ -651,9 +682,11 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
         ui->temp_plot->addGraph();
         ui->temp_plot->graph(1)->setPen(QPen(Qt::red));
         ui->temp_plot->graph(1)->setData(temp_x,avgDew);
+        ui->temp_plot->graph(1)->setName("punkt rosy");
         ui->temp_plot->replot();
 
         //pressure plot
+        ui->pressure_plot->clearGraphs();
         ui->pressure_plot->setTitle("Ciśnienie");
         ui->pressure_plot->setTitleFont(QFont("Arial",8));
         ui->pressure_plot->addGraph();
@@ -669,6 +702,7 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
         ui->pressure_plot->replot();
 
         //humidity plot
+        ui->downpour_plot->clearPlottables();
         ui->downpour_plot->setTitle("Wilgotność");
         ui->downpour_plot->setTitleFont(QFont("Arial",8));
         QCPBars *bars = new QCPBars(ui->downpour_plot->xAxis, ui->downpour_plot->yAxis);
@@ -683,23 +717,7 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
         ui->downpour_plot->xAxis->setNumberPrecision(1);
         ui->downpour_plot->yAxis->setRange(0,100);
         ui->downpour_plot->rescaleAxes();
-        ui->downpour_plot->replot();
-
-        //wind plot
-    //    ui->wind_plot->setTitle("Siła wiatru");
-    //    ui->wind_plot->setTitleFont(QFont("Arial",8));
-    //    ui->wind_plot->addGraph();
-    //    ui->wind_plot->graph(0)->setData(temp_x,avgWind);
-    //    ui->wind_plot->xAxis->setLabel("dzień");
-    //    ui->wind_plot->yAxis->setLabel("km/h");
-    //    ui->wind_plot->xAxis->setRange(1,31);
-    //    ui->wind_plot->xAxis->setTicks(true);
-    //    ui->wind_plot->xAxis->setTickLabels(true);
-    //    ui->wind_plot->xAxis->setTickStep(1.0);
-    //    ui->wind_plot->xAxis->setNumberPrecision(1);
-    //    ui->wind_plot->yAxis->setRange(0,300);
-    //    ui->wind_plot->replot();
-
+        ui->downpour_plot->replot();       
     }
 }
 
@@ -721,12 +739,15 @@ void MainWindow::on_pushButton_clicked()
     }
     else
     {
+        // strip city of polish letters
+        replacePolishDiacritics(&city);
+
         QString country = ui->countryCombo2->currentText();
         //QString month = ui->monthCombo2->currentText();
         QString month = QString::number(ui->monthCombo2->currentIndex()+1);
         QString year = ui->yearCombo2->currentText();
 
-        QString stream = "http://www.wunderground.com/history/airport/EPKT/"+year+"/"+month+"/1/MonthlyHistory.html?req_city="+city+"&req_state=&req_statename="+country+"&format=1";
+        QString stream = "http://www.wunderground.com/history/airport/"+city+"/"+year+"/"+month+"/1/MonthlyHistory.html?req_city="+city+"&req_state=&req_statename="+country+"&format=1";
 
         QNetworkAccessManager* manager = new QNetworkAccessManager(this);
 
@@ -758,12 +779,15 @@ void MainWindow::on_pushButton1_clicked()
     }
     else
     {
+        // strip city of polish letters
+        replacePolishDiacritics(&city);
+
         QString country = ui->countryCombo1->currentText();
         //QString month = ui->monthCombo1->currentText();
         QString month = QString::number(ui->monthCombo1->currentIndex()+1);
         QString year = ui->yearCombo1->currentText();
 
-        QString stream = "http://www.wunderground.com/history/airport/EPKT/"+year+"/"+month+"/1/MonthlyHistory.html?req_city="+city+"&req_state=&req_statename="+country+"&format=1";
+        QString stream = "http://www.wunderground.com/history/airport/"+city+"/"+year+"/"+month+"/1/MonthlyHistory.html?req_city="+city+"&req_state=&req_statename="+country+"&format=1";
 
         QNetworkAccessManager* manager = new QNetworkAccessManager(this);
 
