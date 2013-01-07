@@ -13,9 +13,9 @@
 #include <QMessageBox>
 
 /**
- * @brief MainWindow::MainWindow
+ * @brief Main window constructor - stores are binded to adequate comboboxes here
  * @param parent
- * Main window constructor - stores are binded to adequate comboboxes here
+ *
  */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,8 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 /**
- * @brief MainWindow::~MainWindow
- * Main window destructor
+ * @brief Main window destructor
+ *
  */
 MainWindow::~MainWindow()
 {
@@ -57,7 +57,7 @@ MainWindow::~MainWindow()
 
 
 /**
- * @brief MainWindow::assignIndex
+ * @brief Assigns indexes needed for collecting data for plots
  * @param header
  * @param dateId
  * @param avgTempId
@@ -67,7 +67,7 @@ MainWindow::~MainWindow()
  * @param avgWindId
  * @param precipitationId
  * @param cloudCoverId
- * Assigns indexes needed for collecting data for plots
+ *
  */
 void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgDewId, int*avgHumidityId, int*avgPressureId, int*avgWindId,
                              int*precipitationId, int*cloudCoverId)
@@ -96,7 +96,7 @@ void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgD
 }
 
 /**
- * @brief MainWindow::assignIndexFull
+ * @brief Assigns indexes needed for monthly summary
  * @param header
  * @param dateId
  * @param minTempId
@@ -115,7 +115,7 @@ void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgD
  * @param maxWindId
  * @param precipitationId
  * @param cloudCoverId
- * Assigns indexes needed for monthly summary
+ *
  */
 void MainWindow::assignIndexFull(QString header, int*dateId, int*minTempId, int*avgTempId, int*maxTempId, int*minDewId, int*avgDewId, int*maxDewId,
                                  int*minHumidityId, int*avgHumidityId, int*maxHumidityId, int*minPressureId, int*avgPressureId, int*maxPressureId,
@@ -156,7 +156,7 @@ void MainWindow::assignIndexFull(QString header, int*dateId, int*minTempId, int*
 }
 
 /**
- * @brief MainWindow::assignData
+ * @brief Assigns data needed for plots
  * @param allDataList
  * @param date
  * @param avgTemp
@@ -174,7 +174,7 @@ void MainWindow::assignIndexFull(QString header, int*dateId, int*minTempId, int*
  * @param avgWindId
  * @param precipitationId
  * @param cloudCoverId
- * Assigns data needed for plots
+ *
  */
 void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector<double>* avgTemp, QVector<double>* avgDew,
                             QVector<double>* avgHumidity, QVector<double>* avgPressure, QVector<double>* avgWind, QVector<double>* precipitation,
@@ -209,7 +209,7 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
 }
 
 /**
- * @brief MainWindow::assignDataFull
+ * @brief Assigns data needed for monthly summary
  * @param allDataList
  * @param date
  * @param minTemp
@@ -245,7 +245,7 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
  * @param maxWindId
  * @param precipitationId
  * @param cloudCoverId
- * Assigns data needed for monthly summary
+ *
  */
 void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVector<double>* minTemp, QVector<double>*avgTemp, QVector<double>*maxTemp,
                                 QVector<double>*minDew, QVector<double>*avgDew, QVector<double>*maxDew, QVector<double>*minHumidity, QVector<double>*avgHumidity,
@@ -292,12 +292,12 @@ void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVe
 }
 
 /**
- * @brief MainWindow::loadData
+ * @brief Loads data from given day from column pointed by id to adequate vector
+ * When column value is empty - 0 is loaded to vector - it's important to always have some value remembered for given day
  * @param dayData
  * @param id
  * @param list
- * Loads data from given day from column pointed by id to adequate vector
- * When column value is empty - 0 is loaded to vector - it's important to always have some value remembered for given day
+ *
  */
 void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
 {
@@ -321,12 +321,12 @@ void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
 }
 
 /**
- * @brief MainWindow::loadDataForSummary
+ * @brief Loads data from given day from column pointed by id to adequate vector
+ * When column value is empty - nothing is loaded to vector
  * @param dayData
  * @param id
  * @param list
- * Loads data from given day from column pointed by id to adequate vector
- * When column value is empty - nothing is loaded to vector
+ *
  */
 void MainWindow::loadDataForSummary(QStringList dayData, int id, QVector<double>* list)
 {
@@ -351,10 +351,10 @@ void MainWindow::loadDataForSummary(QStringList dayData, int id, QVector<double>
 }
 
 /**
- * @brief MainWindow::getMin
+ * @brief Finds minimum value in given vector and returns it as QString
  * @param vector
  * @return QString min
- * Finds minimum value in given vector and returns it as QString
+ *
  */
 QString MainWindow::getMin(QVector<double> vector)
 {
@@ -370,10 +370,10 @@ QString MainWindow::getMin(QVector<double> vector)
 }
 
 /**
- * @brief MainWindow::getMax
+ * @brief Finds maximum value in given vector and returns it as QString
  * @param vector
  * @return QString max
- * Finds maximum value in given vector and returns it as QString
+ *
  */
 QString MainWindow::getMax(QVector<double> vector)
 {
@@ -389,10 +389,10 @@ QString MainWindow::getMax(QVector<double> vector)
 }
 
 /**
- * @brief MainWindow::getAvg
+ * @brief Finds average value in given vector and returns it as QString
  * @param vector
  * @return QString avg
- * Finds average value in given vector and returns it as QString
+ *
  */
 QString MainWindow::getAvg(QVector<double> vector)
 {
@@ -411,9 +411,9 @@ QString MainWindow::getAvg(QVector<double> vector)
 }
 
 /**
- * @brief MainWindow::replacePolishDiacritics
+ * @brief Replaces polish diactritics in given QString
  * @param word
- * Replaces polish diactritics in given QString
+ *
  */
 void MainWindow::replacePolishDiacritics(QString*word)
 {
@@ -429,10 +429,10 @@ void MainWindow::replacePolishDiacritics(QString*word)
 }
 
 /**
- * @brief MainWindow::processReply
+ * @brief Processes network reply
  * @param reply
  * @return QStringList temp
- * Processes network reply
+ *
  */
 QStringList MainWindow::processReply(QNetworkReply* reply)
 {
@@ -446,8 +446,8 @@ QStringList MainWindow::processReply(QNetworkReply* reply)
 }
 
 /**
- * @brief MainWindow::on_showData1_clicked
- * Gets data from inputs and sends request (left panel)
+ * @brief Gets data from inputs and sends request (left panel)
+ *
  */
 void MainWindow::on_showData1_clicked()
 {
@@ -486,9 +486,9 @@ void MainWindow::on_showData1_clicked()
 }
 
 /**
- * @brief MainWindow::replyFinished1
+ * @brief Assigns data to plots (left panel)
  * @param reply
- * Assigns data to plots (left panel)
+ *
  */
 void MainWindow::replyFinished1(QNetworkReply* reply)
 {
@@ -585,8 +585,8 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
 }
 
 /**
- * @brief MainWindow::on_showData2_clicked
- * Gets data from inputs and sends request (right panel)
+ * @brief Gets data from inputs and sends request (right panel)
+ *
  */
 void MainWindow::on_showData2_clicked()
 {
@@ -623,9 +623,9 @@ void MainWindow::on_showData2_clicked()
 }
 
 /**
- * @brief MainWindow::replyFinished2
+ * @brief Assigns data to plots (right panel)
  * @param reply
- * Assigns data to plots (right panel)
+ *
  */
 void MainWindow::replyFinished2(QNetworkReply* reply)
 {    
@@ -722,8 +722,8 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
 }
 
 /**
- * @brief MainWindow::on_pushButton_clicked
- * Gets data from inputs and sends request (right panel)
+ * @brief Gets data from inputs and sends request (right panel)
+ *
  */
 void MainWindow::on_pushButton_clicked()
 {
@@ -762,8 +762,8 @@ void MainWindow::on_pushButton_clicked()
 }
 
 /**
- * @brief MainWindow::on_pushButton1_clicked
- * Gets data from inputs and sends request (left panel)
+ * @brief Gets data from inputs and sends request (left panel)
+ *
  */
 void MainWindow::on_pushButton1_clicked()
 {
@@ -802,9 +802,9 @@ void MainWindow::on_pushButton1_clicked()
 }
 
 /**
- * @brief MainWindow::replyFinished4
+ * @brief Sets data to monthly summary box - in both panels
  * @param reply
- * Sets data to monthly summary box - in both panels
+ *
  */
 void MainWindow::replyFinished4(QNetworkReply* reply)
 {
