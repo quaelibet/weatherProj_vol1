@@ -6,20 +6,20 @@
 /**
  * @brief Summary window constructor - all data to be displayed is assigned here
  * @param parent
- * @param minTemp
- * @param avgTemp
- * @param maxTemp
- * @param minDew
- * @param avgDew
- * @param maxDew
- * @param minHumidity
- * @param avgHumidity
- * @param maxHumidity
- * @param minPressure
- * @param avgPressure
- * @param maxPressure
- * @param avgWind
- * @param maxWind
+ * @param minTemp QString containing minimum temperature value
+ * @param avgTemp QString containing average temperature value
+ * @param maxTemp QString containing maximum temperature value
+ * @param minDew QString containing minimum dew point value
+ * @param avgDew QString containing average dew point value
+ * @param maxDew QString containing maximum dew point value
+ * @param minHumidity QString containing minimum humidity value
+ * @param avgHumidity QString containing average humidity value
+ * @param maxHumidity QString containing maximum humidity value
+ * @param minPressure QString containing minimum pressure value
+ * @param avgPressure QString containing average pressure value
+ * @param maxPressure QString containing maximum pressure value
+ * @param avgWind QString containing average wind speed value
+ * @param maxWind QString containing maximum wind speed value
  */
 Plots::Plots(QWidget *parent, QString minTemp, QString avgTemp, QString maxTemp, QString minDew, QString avgDew, QString maxDew, QString minHumidity,
              QString avgHumidity, QString maxHumidity, QString minPressure, QString avgPressure, QString maxPressure, QString avgWind, QString maxWind) :

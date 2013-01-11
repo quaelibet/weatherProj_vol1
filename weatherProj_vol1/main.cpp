@@ -6,7 +6,9 @@
  *
  * \mainpage %Weather Project Documentation
  *
+ * @author Dorota Tomalska
  *
+ * Programowanie w Systemie Linux [SSM]
  *
  */
 int main(int argc, char *argv[])

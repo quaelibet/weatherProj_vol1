@@ -58,7 +58,7 @@ MainWindow::~MainWindow()
 
 /**
  * @brief Assigns indexes needed for collecting data for plots
- * @param header
+ * @param header QString containing column headers (first line from data file)
  * @param dateId
  * @param avgTempId
  * @param avgDewId
@@ -97,7 +97,7 @@ void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgD
 
 /**
  * @brief Assigns indexes needed for monthly summary
- * @param header
+ * @param header header QString containing column headers (first line from data file)
  * @param dateId
  * @param minTempId
  * @param avgTempId
@@ -157,15 +157,15 @@ void MainWindow::assignIndexFull(QString header, int*dateId, int*minTempId, int*
 
 /**
  * @brief Assigns data needed for plots
- * @param allDataList
- * @param date
- * @param avgTemp
- * @param avgDew
- * @param avgHumidity
- * @param avgPressure
- * @param avgWind
- * @param precipitation
- * @param cloudCover
+ * @param allDataList QStringList containing all weather data from file
+ * @param date QList<QDate> used to store dates
+ * @param avgTemp QVector<double> used to store average temperature data
+ * @param avgDew QVector<double> used to store average dew point data
+ * @param avgHumidity  QVector<double> used to store average humidity data
+ * @param avgPressure  QVector<double> used to store average pressure data
+ * @param avgWind  QVector<double> used to store average wind speed data
+ * @param precipitation  QVector<double> used to store average precipitation data
+ * @param cloudCover  QVector<double> used to store average cloud cover data
  * @param dateId
  * @param avgTempId
  * @param avgDewId
@@ -213,24 +213,24 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
 
 /**
  * @brief Assigns data needed for monthly summary
- * @param allDataList
- * @param date
- * @param minTemp
- * @param avgTemp
- * @param maxTemp
- * @param minDew
- * @param avgDew
- * @param maxDew
- * @param minHumidity
- * @param avgHumidity
- * @param maxHumidity
- * @param minPressure
- * @param avgPressure
- * @param maxPressure
- * @param avgWind
- * @param maxWind
- * @param precipitation
- * @param cloudCover
+ * @param allDataList QStringList containing all weather data from file
+ * @param date QList<QDate> used to store dates
+ * @param minTemp QVector<double> used to store minimum temperature data
+ * @param avgTemp QVector<double> used to store average temperature data
+ * @param maxTemp QVector<double> used to store maximum temperature data
+ * @param minDew QVector<double> used to store min dew point data
+ * @param avgDew QVector<double> used to store average dew point data
+ * @param maxDew QVector<double> used to store max dew point data
+ * @param minHumidity QVector<double> used to store min humidity data
+ * @param avgHumidity QVector<double> used to store average humidity data
+ * @param maxHumidity QVector<double> used to store max humidity data
+ * @param minPressure QVector<double> used to store min pressure data
+ * @param avgPressure QVector<double> used to store average pressure data
+ * @param maxPressure QVector<double> used to store max pressure data
+ * @param avgWind QVector<double> used to store average wind speed data
+ * @param maxWind QVector<double> used to store average max speed data
+ * @param precipitation QVector<double> used to store average precipitation data
+ * @param cloudCover QVector<double> used to store average cloud cover data
  * @param dateId
  * @param minTempId
  * @param avgTempId
@@ -300,9 +300,9 @@ void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVe
 /**
  * @brief Loads data from given day from column pointed by id to adequate vector
  * When column value is empty - 0 is loaded to vector - it's important to always have some value remembered for given day
- * @param dayData
- * @param id
- * @param list
+ * @param dayData QStringList containing weather data for one day
+ * @param id column id
+ * @param list QVector<double> used to store weather data corresponding with given column id
  *
  */
 void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
@@ -329,9 +329,9 @@ void MainWindow::loadData(QStringList dayData, int id, QVector<double>* list)
 /**
  * @brief Loads data from given day from column pointed by id to adequate vector
  * When column value is empty - nothing is loaded to vector
- * @param dayData
- * @param id
- * @param list
+ * @param dayData QStringList containing weather data for one day
+ * @param id column id
+ * @param list QVector<double> used to store weather data corresponding with given column id
  *
  */
 void MainWindow::loadDataForSummary(QStringList dayData, int id, QVector<double>* list)
