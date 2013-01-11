@@ -84,7 +84,7 @@ void MainWindow::assignIndex(QString header, int*dateId, int*avgTempId, int*avgD
 
     for (int i = 0; i < indexData.length(); i++)
     {
-        if (indexData[i] == "CET") { *dateId = i; }        
+        if (indexData[i] == "CET" || indexData[i] == "UTC") { *dateId = i; }
         else if (indexData[i] == "Mean TemperatureC") { *avgTempId = i; }        
         else if (indexData[i] == "MeanDew PointC") { *avgDewId = i; }
         else if (indexData[i] == "Mean Humidity") { *avgHumidityId = i; }
@@ -135,7 +135,7 @@ void MainWindow::assignIndexFull(QString header, int*dateId, int*minTempId, int*
 
     for (int i = 0; i < indexData.length(); i++)
     {
-        if (indexData[i] == "CET") { *dateId = i; }
+        if (indexData[i] == "CET" || indexData[i] == "UTC") { *dateId = i; }
         else if (indexData[i] == "Max TemperatureC") { *maxTempId = i; }
         else if (indexData[i] == "Mean TemperatureC") { *avgTempId = i; }
         else if (indexData[i] == "Min TemperatureC") { *minTempId = i; }
@@ -194,16 +194,19 @@ void MainWindow::assignData(QStringList allDataList, QList<QDate>* date, QVector
         {            
             QStringList dayData = allDataList[i].split(",");
             // assign data to tables
-            if (avgTempId) { loadData(dayData, avgTempId, avgTemp); }
-            if (avgDewId) { loadData(dayData, avgDewId, avgDew); }
-            if (avgHumidityId) { loadData(dayData, avgHumidityId, avgHumidity); }
-            if (avgPressureId) { loadData(dayData, avgPressureId, avgPressure); }
-            if (avgWindId) { loadData(dayData, avgWindId, avgWind); }
-            if (precipitationId) { loadData(dayData, precipitationId, precipitation); }
-            if (cloudCoverId) { loadData(dayData, cloudCoverId, cloudCover); }
+            if (avgTempId != -1) { loadData(dayData, avgTempId, avgTemp); }
+            if (avgDewId != -1) { loadData(dayData, avgDewId, avgDew); }
+            if (avgHumidityId != -1) { loadData(dayData, avgHumidityId, avgHumidity); }
+            if (avgPressureId != -1) { loadData(dayData, avgPressureId, avgPressure); }
+            if (avgWindId != -1) { loadData(dayData, avgWindId, avgWind); }
+            if (precipitationId != -1) { loadData(dayData, precipitationId, precipitation); }
+            if (cloudCoverId != -1) { loadData(dayData, cloudCoverId, cloudCover); }
 
-            QDate d = QDate::fromString(dayData[dateId],"yyyy-M-d");
-            date->push_back(d);
+            if (dateId != -1)
+            {
+                QDate d = QDate::fromString(dayData[dateId],"yyyy-M-d");
+                date->push_back(d);
+            }
         }        
     }
 }
@@ -268,25 +271,28 @@ void MainWindow::assignDataFull(QStringList allDataList, QList<QDate>* date, QVe
         {
             QStringList dayData = allDataList[i].split(",");
             // assign data to tables
-            if (minTempId) { loadDataForSummary(dayData, minTempId, minTemp); }
-            if (avgTempId) { loadDataForSummary(dayData, avgTempId, avgTemp); }
-            if (maxTempId) { loadDataForSummary(dayData, maxTempId, maxTemp); }
-            if (minDewId) { loadDataForSummary(dayData, minDewId, minDew); }
-            if (avgDewId) { loadDataForSummary(dayData, avgDewId, avgDew); }
-            if (maxDewId) { loadDataForSummary(dayData, maxDewId, maxDew); }
-            if (minHumidityId) { loadDataForSummary(dayData, minHumidityId, minHumidity); }
-            if (avgHumidityId) { loadDataForSummary(dayData, avgHumidityId, avgHumidity); }
-            if (maxHumidityId) { loadDataForSummary(dayData, maxHumidityId, maxHumidity); }
-            if (minPressureId) { loadDataForSummary(dayData, minPressureId, minPressure); }
-            if (avgPressureId) { loadDataForSummary(dayData, avgPressureId, avgPressure); }
-            if (maxPressureId) { loadDataForSummary(dayData, maxPressureId, maxPressure); }
-            if (avgWindId) { loadDataForSummary(dayData, avgWindId, avgWind); }
-            if (maxWindId) { loadDataForSummary(dayData, maxWindId, maxWind); }
-            if (precipitationId) { loadDataForSummary(dayData, precipitationId, precipitation); }
-            if (cloudCoverId) { loadDataForSummary(dayData, cloudCoverId, cloudCover); }
+            if (minTempId != -1) { loadDataForSummary(dayData, minTempId, minTemp); }
+            if (avgTempId != -1) { loadDataForSummary(dayData, avgTempId, avgTemp); }
+            if (maxTempId != -1) { loadDataForSummary(dayData, maxTempId, maxTemp); }
+            if (minDewId != -1) { loadDataForSummary(dayData, minDewId, minDew); }
+            if (avgDewId != -1) { loadDataForSummary(dayData, avgDewId, avgDew); }
+            if (maxDewId != -1) { loadDataForSummary(dayData, maxDewId, maxDew); }
+            if (minHumidityId != -1) { loadDataForSummary(dayData, minHumidityId, minHumidity); }
+            if (avgHumidityId != -1) { loadDataForSummary(dayData, avgHumidityId, avgHumidity); }
+            if (maxHumidityId != -1) { loadDataForSummary(dayData, maxHumidityId, maxHumidity); }
+            if (minPressureId != -1) { loadDataForSummary(dayData, minPressureId, minPressure); }
+            if (avgPressureId != -1) { loadDataForSummary(dayData, avgPressureId, avgPressure); }
+            if (maxPressureId != -1) { loadDataForSummary(dayData, maxPressureId, maxPressure); }
+            if (avgWindId != -1) { loadDataForSummary(dayData, avgWindId, avgWind); }
+            if (maxWindId != -1) { loadDataForSummary(dayData, maxWindId, maxWind); }
+            if (precipitationId != -1) { loadDataForSummary(dayData, precipitationId, precipitation); }
+            if (cloudCoverId != -1) { loadDataForSummary(dayData, cloudCoverId, cloudCover); }
 
-            QDate d = QDate::fromString(dayData[dateId],"yyyy-M-d");
-            date->push_back(d);
+            if (dateId != -1)
+            {
+                QDate d = QDate::fromString(dayData[dateId],"yyyy-M-d");
+                date->push_back(d);
+            }
         }
     }
 }
@@ -494,7 +500,8 @@ void MainWindow::replyFinished1(QNetworkReply* reply)
 {
     QStringList allDataList = processReply(reply);
 
-    int dateId, avgTempId, avgDewId, avgHumidityId, avgPressureId, avgWindId, precipitationId, cloudCoverId;
+    int dateId = -1, avgTempId = -1, avgDewId = -1, avgHumidityId = -1, avgPressureId = -1,
+            avgWindId = -1, precipitationId = -1, cloudCoverId = -1;
 
     QVector<double> avgTemp, avgDew, avgHumidity, avgPressure, avgWind, precipitation, cloudCover;
     QList<QDate> date;
@@ -631,7 +638,8 @@ void MainWindow::replyFinished2(QNetworkReply* reply)
 {    
     QStringList allDataList = processReply(reply);
 
-    int dateId, avgTempId, avgDewId, avgHumidityId, avgPressureId, avgWindId, precipitationId, cloudCoverId;
+    int dateId = -1, avgTempId = -1, avgDewId = -1, avgHumidityId = -1, avgPressureId = -1,
+            avgWindId = -1, precipitationId = -1, cloudCoverId = -1;
 
     QVector<double> avgTemp, avgDew, avgHumidity, avgPressure, avgWind, precipitation, cloudCover;
     QList<QDate> date;
@@ -810,54 +818,66 @@ void MainWindow::replyFinished4(QNetworkReply* reply)
 {
     QStringList allDataList = processReply(reply);
 
-    int dateId, minTempId, avgTempId, maxTempId, minDewId, avgDewId, maxDewId, minHumidityId, avgHumidityId, maxHumidityId, minPressureId,
-            avgPressureId, maxPressureId, avgWindId, maxWindId, precipitationId, cloudCoverId;
+    int dateId = -1, minTempId = -1, avgTempId = -1, maxTempId = -1, minDewId = -1, avgDewId = -1,
+            maxDewId = -1, minHumidityId = -1, avgHumidityId = -1, maxHumidityId = -1,
+            minPressureId = -1, avgPressureId = -1, maxPressureId = -1, avgWindId = -1,
+            maxWindId = -1, precipitationId = -1, cloudCoverId = -1;
 
     QVector<double> minTemp, avgTemp, maxTemp, minDew, avgDew, maxDew, minHumidity, avgHumidity, maxHumidity, minPressure, avgPressure,
             maxPressure, avgWind, maxWind, precipitation, cloudCover;
 
     QList<QDate> date;
 
-    // assign indexes of adequate values
-    assignIndexFull(allDataList[0],&dateId, &minTempId, &avgTempId, &maxTempId, &minDewId, &avgDewId, &maxDewId, &minHumidityId, &avgHumidityId,
-                &maxHumidityId, &minPressureId, &avgPressureId, &maxPressureId, &avgWindId, &maxWindId, &precipitationId, &cloudCoverId);
+    if (allDataList.length() == 0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Wygląda na to, że wystąpił problem z połączeniem internetowym...");
+        msgBox.setWindowTitle("!");
+        msgBox.exec();
+    }
+    else
+    {
+        // assign indexes of adequate values
+        assignIndexFull(allDataList[0],&dateId, &minTempId, &avgTempId, &maxTempId, &minDewId, &avgDewId, &maxDewId, &minHumidityId, &avgHumidityId,
+                    &maxHumidityId, &minPressureId, &avgPressureId, &maxPressureId, &avgWindId, &maxWindId, &precipitationId, &cloudCoverId);
 
-    // assign data to tables
-    assignDataFull(allDataList, &date, &minTemp, &avgTemp, &maxTemp, &minDew, &avgDew, &maxDew, &minHumidity, &avgHumidity,
-                   &maxHumidity, &minPressure, &avgPressure, &maxPressure, &avgWind, &maxWind, &precipitation, &cloudCover,
-                   dateId, minTempId, avgTempId, maxTempId, minDewId, avgDewId, maxDewId, minHumidityId, avgHumidityId,
-                   maxHumidityId, minPressureId, avgPressureId, maxPressureId, avgWindId, maxWindId, precipitationId, cloudCoverId);
+        // assign data to tables
+        assignDataFull(allDataList, &date, &minTemp, &avgTemp, &maxTemp, &minDew, &avgDew, &maxDew, &minHumidity, &avgHumidity,
+                       &maxHumidity, &minPressure, &avgPressure, &maxPressure, &avgWind, &maxWind, &precipitation, &cloudCover,
+                       dateId, minTempId, avgTempId, maxTempId, minDewId, avgDewId, maxDewId, minHumidityId, avgHumidityId,
+                       maxHumidityId, minPressureId, avgPressureId, maxPressureId, avgWindId, maxWindId, precipitationId, cloudCoverId);
 
-    QString monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
-            monthMaxHumidity, monthMinPressure, monthAvgPressure, monthMaxPressure, monthAvgWind, monthMaxWind, monthPrecipitation, monthCloudCover;
+        QString monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
+                monthMaxHumidity, monthMinPressure, monthAvgPressure, monthMaxPressure, monthAvgWind, monthMaxWind, monthPrecipitation, monthCloudCover;
 
-    // temperature summary
-    monthMinTemp = getMin(minTemp);
-    monthAvgTemp = getAvg(avgTemp);
-    monthMaxTemp = getMax(maxTemp);
-    // dew summary
-    monthMinDew = getMin(minDew);
-    monthAvgDew = getAvg(avgDew);
-    monthMaxDew = getMax(maxDew);
-    // humidity summary
-    monthMinHumidity = getMin(minHumidity);
-    monthAvgHumidity = getAvg(avgHumidity);
-    monthMaxHumidity = getMax(maxHumidity);
-    // pressure summary
-    monthMinPressure = getMin(minPressure);
-    monthAvgPressure = getAvg(avgPressure);
-    monthMaxPressure = getMax(maxPressure);
-    // wind summary
-    monthAvgWind = getAvg(avgWind);
-    monthMaxWind = getMax(maxWind);
-    // precipitation summary
-    monthPrecipitation = getAvg(precipitation);
-    // cloud cover summary
-    monthCloudCover = getAvg(cloudCover);
+        // temperature summary
+        monthMinTemp = getMin(minTemp);
+        monthAvgTemp = getAvg(avgTemp);
+        monthMaxTemp = getMax(maxTemp);
+        // dew summary
+        monthMinDew = getMin(minDew);
+        monthAvgDew = getAvg(avgDew);
+        monthMaxDew = getMax(maxDew);
+        // humidity summary
+        monthMinHumidity = getMin(minHumidity);
+        monthAvgHumidity = getAvg(avgHumidity);
+        monthMaxHumidity = getMax(maxHumidity);
+        // pressure summary
+        monthMinPressure = getMin(minPressure);
+        monthAvgPressure = getAvg(avgPressure);
+        monthMaxPressure = getMax(maxPressure);
+        // wind summary
+        monthAvgWind = getAvg(avgWind);
+        monthMaxWind = getMax(maxWind);
+        // precipitation summary
+        monthPrecipitation = getAvg(precipitation);
+        // cloud cover summary
+        monthCloudCover = getAvg(cloudCover);
 
-    // show summary window
-    Plots *plots = new Plots(this, monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
-                             monthMaxHumidity, monthMinPressure, monthAvgPressure, monthMaxPressure, monthAvgWind, monthMaxWind);
-    plots->setWindowTitle("Podsumowanie miesiąca");
-    plots->show();
+        // show summary window
+        Plots *plots = new Plots(this, monthMinTemp, monthAvgTemp, monthMaxTemp, monthMinDew, monthAvgDew, monthMaxDew, monthMinHumidity, monthAvgHumidity,
+                                 monthMaxHumidity, monthMinPressure, monthAvgPressure, monthMaxPressure, monthAvgWind, monthMaxWind);
+        plots->setWindowTitle("Podsumowanie miesiąca");
+        plots->show();
+    }
 }
